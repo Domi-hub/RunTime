@@ -69,7 +69,7 @@ if (process.env.NODE_ENV != "production") {
 }
 
 //Routes:
-app.get("/welcome", (req, res) => {
+app.get(["/login", "/register"], (req, res) => {
     if (req.session.userId) {
         res.redirect("/");
     } else {
@@ -119,7 +119,7 @@ app.post("/login", (req, res) => {
 //DO NOT DELETE - matches all urls
 app.get("*", (req, res) => {
     if (!req.session.userId) {
-        res.redirect("/welcome");
+        res.redirect("/login");
     } else {
         res.sendFile(__dirname + "/index.html");
     }
