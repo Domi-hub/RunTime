@@ -9,6 +9,7 @@ const { s3Url }             = require("./config");
 const uidSafe               = require("uid-safe");
 const multer                = require("multer");
 const path                  = require("path");
+const db                    = require("./db");
 
 //Middlewares
 const diskStorage = multer.diskStorage({
@@ -36,14 +37,94 @@ app.use(compression());
 app.use(express.static("./public"));
 app.use(express.json());
 
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+
 app.use(
     express.urlencoded({
         extended: false
     })
 );
 
-//Routes:
+app.use(csurf());
 
+app.use((req, res, next) => {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
+
+if (process.env.NODE_ENV != "production") {
+    app.use(
+        "/bundle.js",
+        require("http-proxy-middleware")({
+            target: "http://localhost:8081/"
+        })
+    );
+} else {
+    app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
+}
+
+//Routes:
+app.get("/welcome", (req, res) => {
+    if (req.session.userId) {
+        res.redirect("/");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
+});
+
+app.post("/register", (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+
+    hash(password).then(hash => {
+        db.addRegisteredUser(firstName, lastName, email, hash)
+            .then(result => {
+                const user = result.rows[0];
+                req.session.userId = user.id;
+                res.json("/welcome");
+            })
+            .catch(err => {
+                console.log(err);
+                res.json("/register", { error: true });
+            });
+    });
+});
+
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+
+    db.getUserByEmail(email)
+        .then(result => {
+            const user = result.rows[0];
+            return compare(password, user.password).then(isValid => {
+                if (isValid) {
+                    req.session.userId = user.id;
+                    res.json("/welcome");
+                } else {
+                    res.json("/login", { error: true });
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+
+//DO NOT DELETE - matches all urls
+app.get("*", (req, res) => {
+    if (!req.session.userId) {
+        res.redirect("/welcome");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
+});
+//DO NOT DELETE
 
 app.listen(8080, () => {
     console.log("I'm running...");
