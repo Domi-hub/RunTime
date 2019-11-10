@@ -115,6 +115,47 @@ app.post("/login", (req, res) => {
         });
 });
 
+app.get("/profile", (req, res) => {
+    const userId = req.session.userId;
+
+    db.getUserPrimaryInfo(userId)
+        .then(result => {
+            res.json(result.rows[0])
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.post("/profile", (req, res) => {
+    const userId= req.sesssion.userId;
+    const {
+        firstName, 
+        lastName,
+        email, 
+        password,
+        address, 
+        postcode,
+        city, 
+        country } = req.body;
+        
+    db.updateUserPrimaryInfo(firstName, lastName, email, userId)
+        .then(() => {
+            if (password) {
+                return hash(password).then(hash => {
+                    db.updateUserPassword(hash, userId);
+                });
+            }
+        })
+        .then(db.upsertUserAdditionalInfo(address, postcode, city, country, userId))
+        .then(res.redirect("/"))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
 
 //DO NOT DELETE - matches all urls
 app.get("*", (req, res) => {

@@ -22,3 +22,51 @@ module.exports.getUserByEmail = (email) => {
         [email]
     );
 };
+
+module.exports.getUserPrimaryInfo = (userId) => {
+    return db.query(
+        `
+        SELECT first_name, last_name, email, adresss, post_code, city, country
+        FROM users
+        LEFT_JOIN profiles
+        ON users.id = profiles.user_id
+        WHERE users.id = $1;
+        `,
+        [userId]
+    )
+}
+
+module.exports.updateUserPrimaryInfo = (firstName, lastName, email, userId) => {
+    return db.query(
+        `
+        UPDATE users 
+        SET first_name = $1, last_name =$2, email = $3
+        WHERE id = $4;
+        `,
+        [firstName, lastName, email, userId]
+    )
+}
+
+module.exports.updateUserPassword = (password, userId) => {
+    return db.query(
+        `
+        UPDATE users
+        SET password = $1
+        WHERE id = $2;
+        `,
+        [password, userId]
+    )
+}
+
+module.exports.upsertUserAdditionalInfo(address, postcode, city, country, userId) => {
+    return db.query(
+        `
+        INSERT INTO profiles (address, post_code, city, country, user_id)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (user_id)
+        DO UPDATE SET address = $1, post_code = $2, city = $3, country = $4
+        RETURNING id
+        `,
+        [address, postcode, city, country, userId]
+    )
+}
