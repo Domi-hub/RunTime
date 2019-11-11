@@ -115,7 +115,7 @@ app.post("/login", (req, res) => {
         });
 });
 
-app.get("/profile", (req, res) => {
+app.get("/api/profile", (req, res) => {
     const userId = req.session.userId;
 
     db.getUserPrimaryInfo(userId)
@@ -128,7 +128,7 @@ app.get("/profile", (req, res) => {
         });
 });
 
-app.post("/profile", (req, res) => {
+app.post("/api/profile", (req, res) => {
     const userId= req.sesssion.userId;
     const {
         firstName, 
@@ -149,7 +149,7 @@ app.post("/profile", (req, res) => {
             }
         })
         .then(db.upsertUserAdditionalInfo(address, postcode, city, country, userId))
-        .then(res.redirect("/"))
+        .then(res.json("/"))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);

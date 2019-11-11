@@ -26,9 +26,9 @@ module.exports.getUserByEmail = (email) => {
 module.exports.getUserPrimaryInfo = (userId) => {
     return db.query(
         `
-        SELECT first_name, last_name, email, adresss, post_code, city, country
+        SELECT first_name, last_name, email, address, post_code, city, country
         FROM users
-        LEFT_JOIN profiles
+        LEFT JOIN profiles
         ON users.id = profiles.user_id
         WHERE users.id = $1;
         `,
@@ -58,7 +58,7 @@ module.exports.updateUserPassword = (password, userId) => {
     )
 }
 
-module.exports.upsertUserAdditionalInfo(address, postcode, city, country, userId) => {
+module.exports.upsertUserAdditionalInfo = (address, postcode, city, country, userId) => {
     return db.query(
         `
         INSERT INTO profiles (address, post_code, city, country, user_id)
