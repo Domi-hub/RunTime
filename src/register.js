@@ -13,9 +13,9 @@ export default function Register() {
     const [lastName, setLastName] = useState("");
 
     return (
-        <div className="registration">
+        <React.Fragment>
             {isError && (
-                <div className="error">Something went wrong.</div>
+                <React.Fragment>Something went wrong.</React.Fragment>
             )}
             <input
                 name="email"
@@ -42,9 +42,9 @@ export default function Register() {
                 className="register-button"
                 onClick={() => dispatch(register(email, password, firstName, lastName))}
             >
-                REGISTER
+                Register
             </button>
             <Link to="/login">Click here to Log in!</Link>
-        </div>
+        </React.Fragment>
     );
 }
