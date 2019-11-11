@@ -9,10 +9,13 @@ export async function login(email, password) {
     }
     
     try {
-        await axios.post("/login", {
+        await axios.post("/api/login", {
             email: email,
             password: password
         });
+        return {
+            type: "LOGIN"
+        };
     } catch (e) {
         console.error(e);
         return {
@@ -20,10 +23,6 @@ export async function login(email, password) {
             isError: true
         };
     }
-
-    return {
-        type: "LOGIN"
-    };
 }
 
 export async function register(email, password, firstName, lastName) {
@@ -35,12 +34,15 @@ export async function register(email, password, firstName, lastName) {
     }
     
     try {
-        await axios.post("/register", {
+        await axios.post("/api/register", {
             email: email,
             password: password,
             firstName: firstName,
             lastName: lastName
         });
+        return {
+            type: "REGISTER"
+        };
     } catch (e) {
         console.error(e);
         return {
@@ -48,8 +50,60 @@ export async function register(email, password, firstName, lastName) {
             isError: true
         };
     }
-
-    return {
-        type: "REGISTER"
-    };
 }
+
+export async function getProfile() {
+    try {
+        const { data } = await axios.get("/api/profile");
+        return {
+            type: "GET_PROFILE",
+            profile: {
+                firstName: data.first_name,
+                lastName: data.last_name,
+                email: data.email,
+                address: data.address,
+                postcode: data.postcode,
+                city: data.city,
+                country: data.country,
+            }
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "GET_PROFILE",
+            isError: true
+        };
+    }
+}
+
+export async function editProfile(firstName, lastName, email, password, address, postcode, city, country) {
+    if (email.indexOf("@") == -1) {
+        return {
+            type: "EDIT_PROFILE",
+            isError: true
+        };
+    }
+
+    try {
+        await axios.post("/api/profile", {
+            firstName: firstName, 
+            lastName: lastName,
+            email: email,
+            password: password, 
+            address: address, 
+            postcode: postcode,
+            city: city,
+            country: country
+        });
+        return {
+            type: "EDIT_PROFILE"
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "EDIT_PROFILE",
+            isError: true
+        };
+    }
+}
+

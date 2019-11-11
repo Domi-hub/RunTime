@@ -77,7 +77,7 @@ app.get(["/login", "/register"], (req, res) => {
     }
 });
 
-app.post("/register", (req, res) => {
+app.post("/api/register", (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     hash(password).then(hash => {
@@ -85,7 +85,7 @@ app.post("/register", (req, res) => {
             .then(result => {
                 const user = result.rows[0];
                 req.session.userId = user.id;
-                res.json("/welcome");
+                res.json("/");
             })
             .catch(err => {
                 console.log(err);
@@ -94,7 +94,7 @@ app.post("/register", (req, res) => {
     });
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
     const { email, password } = req.body;
 
     db.getUserByEmail(email)
@@ -103,7 +103,7 @@ app.post("/login", (req, res) => {
             return compare(password, user.password).then(isValid => {
                 if (isValid) {
                     req.session.userId = user.id;
-                    res.json("/welcome");
+                    res.json("/");
                 } else {
                     res.json("/login", { error: true });
                 }
@@ -129,7 +129,7 @@ app.get("/api/profile", (req, res) => {
 });
 
 app.post("/api/profile", (req, res) => {
-    const userId= req.sesssion.userId;
+    const userId= req.session.userId;
     const {
         firstName, 
         lastName,
@@ -156,6 +156,10 @@ app.post("/api/profile", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/login");
+});
 
 //DO NOT DELETE - matches all urls
 app.get("*", (req, res) => {

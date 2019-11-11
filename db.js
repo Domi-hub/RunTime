@@ -26,7 +26,7 @@ module.exports.getUserByEmail = (email) => {
 module.exports.getUserPrimaryInfo = (userId) => {
     return db.query(
         `
-        SELECT first_name, last_name, email, address, post_code, city, country
+        SELECT first_name, last_name, email, address, postcode, city, country
         FROM users
         LEFT JOIN profiles
         ON users.id = profiles.user_id
@@ -61,10 +61,10 @@ module.exports.updateUserPassword = (password, userId) => {
 module.exports.upsertUserAdditionalInfo = (address, postcode, city, country, userId) => {
     return db.query(
         `
-        INSERT INTO profiles (address, post_code, city, country, user_id)
+        INSERT INTO profiles (address, postcode, city, country, user_id)
         VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (user_id)
-        DO UPDATE SET address = $1, post_code = $2, city = $3, country = $4
+        DO UPDATE SET address = $1, postcode = $2, city = $3, country = $4
         RETURNING id
         `,
         [address, postcode, city, country, userId]

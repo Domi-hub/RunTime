@@ -18,7 +18,7 @@ CREATE TABLE profiles
 (
     id SERIAL PRIMARY KEY,
     address VARCHAR,
-    post_code VARCHAR,
+    postcode VARCHAR,
     city VARCHAR,
     country VARCHAR,
     user_id INT REFERENCES users(id) NOT NULL UNIQUE

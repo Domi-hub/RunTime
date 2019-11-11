@@ -11,9 +11,9 @@ export default function Login() {
     const [password, setPassword] = useState("");
 
     return (
-        <div className="login">
+        <React.Fragment>
             {isError && (
-                <div className="error">Something went wrong.</div>
+                <React.Fragment>Something went wrong.</React.Fragment>
             )}
             <input
                 name="email"
@@ -27,9 +27,9 @@ export default function Login() {
                 onChange={e => setPassword(e.target.value)}
             />
             <button className="login-button" onClick={() => dispatch(login(email, password))}>
-                LOG IN
+                Login
             </button>
             <Link to="/register">Click here to Register!</Link>
-        </div>
+        </React.Fragment>
     );
 }
