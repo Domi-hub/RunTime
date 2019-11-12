@@ -4,5 +4,5 @@
 
 .google-map {
     height: calc(100vh - 60px);
-    width: 75%;
+    width: 100%;
 }
