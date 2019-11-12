@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "./actions";
-import { Form, Button, Row} from "react-bootstrap";
+import { Form, Button, Row, Col, Card } from "react-bootstrap";
 
 export default function Login() {
     const dispatch = useDispatch();
@@ -12,69 +12,71 @@ export default function Login() {
     const [password, setPassword] = useState("");
 
     return (
-        <React.Fragment>
+        <Fragment>
             {isError && (
-                <React.Fragment>Something went wrong.</React.Fragment>
+                <Fragment> Something went wrong. </Fragment>
             )}
 
-            <div class="card">
-                <h5 class="card-header info-color white-text text-center py-4">
-                    <strong>Log In</strong>
-                </h5>
+            <Card>
+                <Card.Header className="text-center">
+                    <strong> Log In </strong>
+                </Card.Header>
 
                 <Form>
-                <Row>
-                <div class="col"></div>
-                <div class="col">
-                    <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control
-                            name="email"
-                            type="email" 
-                            placeholder="Email"
-                            onChange={e => setEmail(e.target.value)} 
-                            />
-                    </Form.Group>
-                </div>
-                <div class="col"></div>
-                </Row>
+                    <Row>
+                        <Col />
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control
+                                    name="email"
+                                    type="email" 
+                                    autoComplete="email"
+                                    placeholder="Email"
+                                    onChange={e => setEmail(e.target.value)} 
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col />
+                    </Row>
 
-                <Row>
-                <div class="col"></div>
-                <div class="col">
-                    <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control 
-                            name="password"
-                            type="password" 
-                            placeholder="Password"
-                            onChange={e => setPassword(e.target.value)}
-                            />
-                    </Form.Group>
-                </div>
-                <div class="col"></div>
-                </Row>
+                    <Row>
+                        <Col />
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control 
+                                    name="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    placeholder="Password"
+                                    onChange={e => setPassword(e.target.value)}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col />
+                    </Row>
 
-                <Row>
-                    <div class="col"></div>
-                    <Button 
-                        variant="warning" 
-                        type="submit"
-                        class="col"
-                        onClick={() => dispatch(login(email, password))}
-                        >
-                        Login
-                    </Button>
-                    <div class="col"></div>
-                </Row>
+                    <Row>
+                        <Col />
+                        <Col>
+                            <Button 
+                                variant="warning"
+                                onClick={() => dispatch(login(email, password))}
+                                >
+                                Login
+                            </Button>
+                        </Col>
+                        <Col />
+                    </Row>
 
-                <Row> 
-                    <div class="col"></div>
-                    <Link class="text-center" to="/register">Click here to Register!</Link>
-                    <div class="col"></div>
-                </Row>
+                    <Row> 
+                        <Col />
+                        <Link to="/register">Click here to Register</Link>
+                        <Col />
+                    </Row>
                 </Form>
-            </div>
-        </React.Fragment>
+            </Card>
+        </Fragment>
     );
 }

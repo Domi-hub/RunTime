@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProfile, editProfile } from "./actions";
-import { Form, Button, Row} from "react-bootstrap";
+import { Form, Button, Row, Col, Card } from "react-bootstrap";
 
 export default function Profile() {
     const dispatch = useDispatch();
@@ -15,14 +15,14 @@ export default function Profile() {
     });
 
     return (
-        <React.Fragment>
+        <Fragment>
             {isError && (
-                <React.Fragment>Something went wrong.</React.Fragment>
+                <Fragment> Something went wrong. </Fragment>
             )}
             {profile && (
                 <EditProfile profile={profile} />
             )}
-        </React.Fragment>
+        </Fragment>
     );
 }
 
@@ -39,161 +39,169 @@ function EditProfile({ profile }) {
     const [country, setCountry] = useState(profile.country);
 
     return (
-        <React.Fragment>
-            <div class="card">
-                <h5 class="card-header info-color white-text text-center py-4">
-                    <strong>Profile</strong>
-                </h5>
+        <Fragment>
+            <Card>
+                <Card.Header className="text-center">
+                    <strong> Edit Profile </strong>
+                </Card.Header>
 
                 <Form>
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicEmail">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>First Name</Form.Label>
                                 <Form.Control
                                     name = "firstName" 
                                     placeholder="First Name"
+                                    autoComplete="first=name"
                                     onChange={e => setFirstName(e.target.value)}
                                     defaultValue={firstName}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicEmail">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>Last Name</Form.Label>
                                 <Form.Control
                                     name = "lastName" 
                                     placeholder="Last Name"
+                                    autoComplete="last-name"
                                     onChange={e => setLastName(e.target.value)}
                                     defaultValue={lastName}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicEmail">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>Email address</Form.Label>
                                 <Form.Control 
                                     name="email"
                                     type="email" 
                                     placeholder="Email"
+                                    autoComplete="email"
                                     onChange={e => setEmail(e.target.value)} 
                                     defaultValue={email}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicPassword">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control 
                                     name="password"
                                     type="password" 
                                     placeholder="Password"
+                                    autoComplete="current-password"
                                     onChange={e => setPassword(e.target.value)}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicPassword">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control 
                                     name="address"
                                     placeholder="Address"
+                                    autoComplete="address"
                                     onChange={e => setAddress(e.target.value)}
                                     defaultValue={address}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicPassword">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>Postcode</Form.Label>
                                 <Form.Control 
                                     name="postcode"
                                     placeholder="Postcode"
+                                    autoComplete="postcode"
                                     onChange={e => setPostcode(e.target.value)}
                                     defaultValue={postcode}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicPassword">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>City</Form.Label>
                                 <Form.Control 
                                     name="city"
                                     placeholder="City"
+                                    autoComplete="city"
                                     onChange={e => setCity(e.target.value)}
                                     defaultValue={city}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <div class="col">
-                            <Form.Group controlId="formBasicPassword">
+                        <Col />
+                        <Col>
+                            <Form.Group>
                                 <Form.Label>Country</Form.Label>
                                 <Form.Control 
                                     name="country"
                                     placeholder="Country"
+                                    autoComplete="country"
                                     onChange={e => setCountry(e.target.value)}
                                     defaultValue={country}
                                     />
                             </Form.Group>
-                        </div>
-                        <div class="col"></div>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row>
-                        <div class="col"></div>
-                        <Button 
-                            variant="warning" 
-                            type="submit"
-                            class="col"
-                            onClick={() => dispatch(editProfile(firstName, lastName, email, password, address, postcode, city, country))}> 
-                                Save
-                        </Button>
-                        <div class="col"></div>
+                        <Col />
+                        <Col>
+                            <Button 
+                                variant="warning"
+                                onClick={() => dispatch(editProfile(firstName, lastName, email, password, address, postcode, city, country))}> 
+                                    Save
+                            </Button>
+                        </Col>
+                        <Col />
                     </Row>
 
                     <Row> 
-                        <div class="col"></div>
-                        <Link to="/">Skip</Link>
-                        <div class="col"></div>
+                        <Col />
+                        <Link to="/"> Skip </Link>
+                        <Col />
                     </Row>
                 </Form>
-            </div>
-        </React.Fragment>
+            </Card>
+        </Fragment>
     );
 };
