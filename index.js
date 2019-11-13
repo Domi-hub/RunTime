@@ -156,6 +156,55 @@ app.post("/api/profile", (req, res) => {
         });
 });
 
+app.get("/api/events", (req, res) => {
+    const userId= req.session.userId;
+
+    db.getEvents(userId)
+        .then(result => {
+            const organizedEvents       = result.rows.filter((event) => event.organizer_id == userId)
+            const participatingEvents   = result.rows.filter((event) => event.organizer_id != userId)
+            res.json({
+                events: {
+                    organized: organizedEvents,
+                    participating: participatingEvents
+                }
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.get("/api/map", (req, res) => {
+    db.getMapEvents()
+        .then(result => {
+            res.json({
+                events: result.rows
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.post("/api/image", uploader.single("image"), s3.upload, (req, res) => {
+    const imageUrl = `${s3Url}${req.file.filename}`;
+    const userId = req.session.userId;
+
+    db.updateImage(imageUrl, userId)
+        .then(() => {
+            res.json({
+                imageUrl: imageUrl
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/login");

@@ -2,17 +2,19 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProfile, editProfile } from "./actions";
-import { Form, Button, Row, Col, Card } from "react-bootstrap";
+import { Form, Button, Row, Col, Card, Image } from "react-bootstrap";
+import ImageUploader from "./image-uploader";
 
 export default function Profile() {
     const dispatch = useDispatch();
     
     const isError = useSelector(state => state.isError);
     const profile = useSelector(state => state.profile);
+    const imageUrl = useSelector(state => state.imageUrl);
 
     useEffect(() => {
         dispatch(getProfile());
-    });
+    }, [imageUrl]);
 
     return (
         <Fragment>
@@ -44,8 +46,27 @@ function EditProfile({ profile }) {
                 <Card.Header className="text-center">
                     <strong> Edit Profile </strong>
                 </Card.Header>
-
                 <Form>
+                    <Row>
+                        <Col />
+                        <Col>
+                            <Image
+                                src={profile.imageUrl === "" ? "/default.jpeg" : profile.imageUrl }
+                                alt={profile.firstName + " " + profile.lastName}
+                                rounded
+                            />
+                        </Col>
+                        <Col />
+                        <Col />
+                    </Row>
+                    <Row>
+                        <Col />
+                        <Col>
+                            <ImageUploader />
+                        </Col>
+                        <Col />
+                        <Col />
+                    </Row>
                     <Row>
                         <Col />
                         <Col>
@@ -54,9 +75,21 @@ function EditProfile({ profile }) {
                                 <Form.Control
                                     name = "firstName" 
                                     placeholder="First Name"
-                                    autoComplete="first=name"
+                                    autoComplete="first-name"
                                     onChange={e => setFirstName(e.target.value)}
                                     defaultValue={firstName}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Address</Form.Label>
+                                <Form.Control 
+                                    name="address"
+                                    placeholder="Address"
+                                    autoComplete="address"
+                                    onChange={e => setAddress(e.target.value)}
+                                    defaultValue={address}
                                     />
                             </Form.Group>
                         </Col>
@@ -74,6 +107,18 @@ function EditProfile({ profile }) {
                                     autoComplete="last-name"
                                     onChange={e => setLastName(e.target.value)}
                                     defaultValue={lastName}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Postcode</Form.Label>
+                                <Form.Control 
+                                    name="postcode"
+                                    placeholder="Postcode"
+                                    autoComplete="postcode"
+                                    onChange={e => setPostcode(e.target.value)}
+                                    defaultValue={postcode}
                                     />
                             </Form.Group>
                         </Col>
@@ -95,62 +140,6 @@ function EditProfile({ profile }) {
                                     />
                             </Form.Group>
                         </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control 
-                                    name="password"
-                                    type="password" 
-                                    placeholder="Password"
-                                    autoComplete="current-password"
-                                    onChange={e => setPassword(e.target.value)}
-                                    />
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Address</Form.Label>
-                                <Form.Control 
-                                    name="address"
-                                    placeholder="Address"
-                                    autoComplete="address"
-                                    onChange={e => setAddress(e.target.value)}
-                                    defaultValue={address}
-                                    />
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Postcode</Form.Label>
-                                <Form.Control 
-                                    name="postcode"
-                                    placeholder="Postcode"
-                                    autoComplete="postcode"
-                                    onChange={e => setPostcode(e.target.value)}
-                                    defaultValue={postcode}
-                                    />
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
                         <Col>
                             <Form.Group>
                                 <Form.Label>City</Form.Label>
@@ -168,6 +157,18 @@ function EditProfile({ profile }) {
 
                     <Row>
                         <Col />
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control 
+                                    name="password"
+                                    type="password" 
+                                    placeholder="Password"
+                                    autoComplete="current-password"
+                                    onChange={e => setPassword(e.target.value)}
+                                    />
+                            </Form.Group>
+                        </Col>
                         <Col>
                             <Form.Group>
                                 <Form.Label>Country</Form.Label>
@@ -192,12 +193,9 @@ function EditProfile({ profile }) {
                                     Save
                             </Button>
                         </Col>
-                        <Col />
-                    </Row>
-
-                    <Row> 
-                        <Col />
-                        <Link to="/"> Skip </Link>
+                        <Col>
+                            <Link to="/"> Skip </Link>
+                        </Col>
                         <Col />
                     </Row>
                 </Form>

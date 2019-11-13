@@ -26,15 +26,15 @@ module.exports.getUserByEmail = (email) => {
 module.exports.getUserPrimaryInfo = (userId) => {
     return db.query(
         `
-        SELECT first_name, last_name, email, address, postcode, city, country
+        SELECT first_name, last_name, image_url, email, address, postcode, city, country
         FROM users
         LEFT JOIN profiles
         ON users.id = profiles.user_id
         WHERE users.id = $1;
         `,
         [userId]
-    )
-}
+    );
+};
 
 module.exports.updateUserPrimaryInfo = (firstName, lastName, email, userId) => {
     return db.query(
@@ -44,8 +44,8 @@ module.exports.updateUserPrimaryInfo = (firstName, lastName, email, userId) => {
         WHERE id = $4;
         `,
         [firstName, lastName, email, userId]
-    )
-}
+    );
+};
 
 module.exports.updateUserPassword = (password, userId) => {
     return db.query(
@@ -55,8 +55,8 @@ module.exports.updateUserPassword = (password, userId) => {
         WHERE id = $2;
         `,
         [password, userId]
-    )
-}
+    );
+};
 
 module.exports.upsertUserAdditionalInfo = (address, postcode, city, country, userId) => {
     return db.query(
@@ -65,8 +65,43 @@ module.exports.upsertUserAdditionalInfo = (address, postcode, city, country, use
         VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (user_id)
         DO UPDATE SET address = $1, postcode = $2, city = $3, country = $4
-        RETURNING id
+        RETURNING id;
         `,
         [address, postcode, city, country, userId]
-    )
-}
+    );
+};
+
+module.exports.updateImage = (imageUrl, userId) => {
+    return db.query(
+        `
+        UPDATE users
+        SET image_url = $1
+        WHERE id = $2;
+        `,
+        [imageUrl, userId]
+    );
+};
+
+module.exports.getEvents = (userId) => {
+    return db.query(
+        `
+        SELECT *
+        FROM events
+        WHERE organizer_id = $1
+        OR events.id IN (
+            SELECT event_id FROM participants
+            WHERE user_id = $1
+        );
+        `,
+        [userId]
+    );
+};
+
+module.exports.getMapEvents = () => {
+    return db.query(
+        `
+        SELECT *
+        FROM events;
+        `
+    );
+};

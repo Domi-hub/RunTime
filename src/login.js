@@ -17,7 +17,7 @@ export default function Login() {
                 <Fragment> Something went wrong. </Fragment>
             )}
 
-            <Card>
+            <Card className="card">
                 <Card.Header className="text-center">
                     <strong> Log In </strong>
                 </Card.Header>

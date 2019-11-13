@@ -60,6 +60,7 @@ export async function getProfile() {
             profile: {
                 firstName: data.first_name,
                 lastName: data.last_name,
+                imageUrl: data.image_url,
                 email: data.email,
                 address: data.address,
                 postcode: data.postcode,
@@ -107,3 +108,52 @@ export async function editProfile(firstName, lastName, email, password, address,
     }
 }
 
+export async function uploadImage(image) {
+    try {
+        var form = new FormData();
+        form.append("image", image);
+        const { data } = await axios.post("/api/image", form);
+        return {
+            type: "UPLOAD_IMAGE",
+            imageUrl: data.imageUrl
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "UPLOAD_IMAGE",
+            isError: true
+        };
+    }
+}
+
+export async function getMyEvents() {
+    try {
+        const { data } = await axios.get("/api/events");
+        return {
+            type: "GET_MY_EVENTS",
+            events: data.events
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "GET_MY_EVENTS",
+            isError: true
+        };
+    }
+}
+
+export async function getMapEvents() {
+    try {
+        const { data } = await axios.get("/api/map");
+        return {
+            type: "GET_MAP_EVENTS",
+            events: data.events
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "GET_MAP_EVENTS",
+            isError: true
+        };
+    }
+}

@@ -1,33 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import GoogleMapReact from 'google-map-react';
+import { getMapEvents } from "./actions";
 import { Card } from "react-bootstrap";
+import CreateEvent from "./create-event";
+import Event from "./event";
 
 export default function GoogleMap() {
+    const dispatch = useDispatch();
+
+    const events = useSelector(state => state.events);
     const [center, setCenter] = useState({lat: 52.519457, lng: 13.410072 });
-    const [zoom, setZoom] = useState(11);
+    const [pointer, setPointer] = useState(null);
+    const [showPointer, setShowPointer] = useState(false);
+
+    useEffect(() => {
+        dispatch(getMapEvents());
+    }, []);
 
     return (
         <Card className="google-map">
             <GoogleMapReact
                 defaultCenter={center}
-                defaultZoom={zoom}
+                defaultZoom={12}
+                onClick={(pointer) => {
+                    setPointer(pointer);
+                    setShowPointer(true);
+                }}
             >
-                <Marker
-                    lat={52.531967}
-                    lng={13.320829}
-                />
-
-                <Marker
-                    lat={52.508699}
-                    lng={13.442507}
-                />
+                {events && events.map((event) => {
+                    return (
+                        <Event
+                            key={event.id}
+                            lat={event.latitude}
+                            lng={event.longitude}
+                        />
+                    );
+                })}
             </GoogleMapReact>
+
+            {pointer && showPointer && (
+                <CreateEvent
+                    pointer={pointer}
+                    show={showPointer}
+                    onClose={() => setShowPointer(false)}
+                />
+            )}
         </Card>
     );
-}
-
-function Marker() {
-    return (
-        <h1>*</h1>
-    )
 }
