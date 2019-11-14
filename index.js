@@ -119,9 +119,7 @@ app.get("/api/profile", (req, res) => {
     const userId = req.session.userId;
 
     db.getUserPrimaryInfo(userId)
-        .then(result => {
-            res.json(result.rows[0])
-        })
+        .then(result => res.json(result.rows[0]))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);
@@ -129,7 +127,7 @@ app.get("/api/profile", (req, res) => {
 });
 
 app.post("/api/profile", (req, res) => {
-    const userId= req.session.userId;
+    const userId = req.session.userId;
     const {
         firstName, 
         lastName,
@@ -157,7 +155,7 @@ app.post("/api/profile", (req, res) => {
 });
 
 app.get("/api/events", (req, res) => {
-    const userId= req.session.userId;
+    const userId = req.session.userId;
 
     db.getEvents(userId)
         .then(result => {
@@ -178,11 +176,9 @@ app.get("/api/events", (req, res) => {
 
 app.get("/api/map", (req, res) => {
     db.getMapEvents()
-        .then(result => {
-            res.json({
-                events: result.rows
-            });
-        })
+        .then(result => res.json({
+            events: result.rows
+        }))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);
@@ -194,11 +190,65 @@ app.post("/api/image", uploader.single("image"), s3.upload, (req, res) => {
     const userId = req.session.userId;
 
     db.updateImage(imageUrl, userId)
-        .then(() => {
-            res.json({
-                imageUrl: imageUrl
-            });
-        })
+        .then(() => res.json({
+            imageUrl: imageUrl
+        }))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.post("/api/event", (req, res) => {
+    const userId = req.session.userId;
+    const {
+        latitude,
+        longitude,
+        name, 
+        description,
+        date, 
+        time } = req.body;
+
+    db.addEvent(latitude, longitude, name, description, date, time, userId)
+        .then((result) => db.addParticipant(result.rows[0].id, userId))
+        .then((result) => res.json(result.rows[0]))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.post("/api/event/:id", (req, res) => {
+    const userId = req.session.userId;
+    const eventId = req.params.id;
+
+    db.addParticipant(eventId, userId)
+        .then(() => res.json("/"))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.delete("/api/event/:id", (req, res) => {
+    const userId = req.session.userId;
+    const eventId = req.params.id;
+
+    db.deleteParticipants(eventId)
+        .then(() => db.deleteEvent(eventId, userId))
+        .then(() => res.json("/events"))
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
+app.delete("/api/participation/:id", (req, res) => {
+    const userId = req.session.userId;
+    const eventId = req.params.id;
+
+    db.deleteParticipant(eventId, userId)
+        .then(() => res.json("/events"))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);

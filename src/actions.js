@@ -1,5 +1,6 @@
 import axios from "./axios";
 
+
 export async function login(email, password) {
     if (email.indexOf("@") == -1) {
         return {
@@ -131,7 +132,7 @@ export async function getMyEvents() {
         const { data } = await axios.get("/api/events");
         return {
             type: "GET_MY_EVENTS",
-            events: data.events
+            myEvents: data.events
         };
     } catch (e) {
         console.error(e);
@@ -147,12 +148,132 @@ export async function getMapEvents() {
         const { data } = await axios.get("/api/map");
         return {
             type: "GET_MAP_EVENTS",
-            events: data.events
+            mapEvents: data.events
         };
     } catch (e) {
         console.error(e);
         return {
             type: "GET_MAP_EVENTS",
+            isError: true
+        };
+    }
+}
+
+export async function addMapEvent(latitude, longitude, name, description, date, time) {
+    try {
+        let event = {
+            latitude: latitude,
+            longitude: longitude,
+            name: name,
+            description: description,
+            date: date,
+            time: time
+        }
+        const { data } = await axios.post("/api/event", event);
+        event.id = data.id;
+        
+        return {
+            type: "ADD_MAP_EVENT",
+            mapEvent: event
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "ADD_MAP_EVENT",
+            isError: true
+        };
+    }
+}
+
+export async function getNewEventAddress(latitude, longitude) {
+    try {
+        const { data } = await axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=" + key);
+
+        let address = "";
+        if (data.results.length > 0) {
+            address = data.results[0].formatted_address;
+        }
+
+        return {
+            type: "GET_NEW_EVENT_ADDRESS",
+            newEventAddress: address
+        }
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "GET_NEW_EVENT_ADDRESS",
+            isError: true
+        };
+    }
+}
+
+export async function getEventAddress(latitude, longitude) {
+    try {
+        const { data } = await axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=" + key);
+
+        let address = "";
+        if (data.results.length > 0) {
+            address = data.results[0].formatted_address;
+        }
+
+        return {
+            type: "GET_EVENT_ADDRESS",
+            eventAddress: address
+        }
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "GET_EVENT_ADDRESS",
+            isError: true
+        };
+    }
+}
+
+export async function joinEvent(id) {
+    try {
+        await axios.post("/api/event/" + id);
+        
+        return {
+            type: "JOIN_EVENT"
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "JOIN_EVENT",
+            isError: true
+        };
+    }
+}
+
+export async function deleteMyEvent(id) {
+    try {
+        await axios.delete("/api/event/" + id);
+        
+        return {
+            type: "DELETE_MY_EVENT",
+            myDeletedEventId: id
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "DELETE_MY_EVENT",
+            isError: true
+        };
+    }
+}
+
+export async function cancelMyParticipation(id) {
+    try {
+        await axios.delete("/api/participation/" + id);
+        
+        return {
+            type: "CANCEL_MY_PARTICIPATION",
+            myCanceledParticipatingEventId: id
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "CANCEL_MY_PARTICIPATION",
             isError: true
         };
     }

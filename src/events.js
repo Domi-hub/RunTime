@@ -1,36 +1,38 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyEvents } from "./actions";
-import { Form, Button, Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
+import OrganizedEvents from "./organized-events";
+import ParticipatingEvents from "./participating-events";
 
 export default function Events() {
     const dispatch = useDispatch();
     
     const isError = useSelector(state => state.isError);
-    const events = useSelector(state => state.events);
+    const organizedEvents = useSelector(state => state.organizedEvents);
+    const participatingEvents = useSelector(state => state.participatingEvents);
 
     useEffect(() => {
         dispatch(getMyEvents());
     }, []);
 
-    if (!events) {
-        return null;
-    }
-
     return ( 
         <Fragment>
-            <OrganizedEvents organizedEvents={events.organized} />
-            <ParticipatingEvents participatingEvents={events.participating} />
+            <Container> 
+            <Row>
+                <Col md={6}>
+                    {organizedEvents && (
+                        <OrganizedEvents organizedEvents={organizedEvents} />
+                    )}
+                </Col>
+
+                <Col md={6}>
+                    {participatingEvents && (
+                        <ParticipatingEvents participatingEvents={participatingEvents} />
+                    )}
+                </Col>
+            </Row> 
+            </Container>
         </Fragment>
     );
-}
-
-function OrganizedEvents({ organizedEvents }) {
-    console.log(organizedEvents);
-    return null;
-}
-
-function ParticipatingEvents({ participatingEvents }) {
-    console.log(participatingEvents);
-    return null;
 }

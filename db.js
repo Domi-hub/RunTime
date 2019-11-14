@@ -85,13 +85,16 @@ module.exports.updateImage = (imageUrl, userId) => {
 module.exports.getEvents = (userId) => {
     return db.query(
         `
-        SELECT *
+        SELECT events.*, COUNT(participants.id) as participants
         FROM events
+        LEFT JOIN participants
+        ON events.id = participants.event_id
         WHERE organizer_id = $1
         OR events.id IN (
             SELECT event_id FROM participants
             WHERE user_id = $1
-        );
+        )
+        GROUP BY events.id;
         `,
         [userId]
     );
@@ -100,8 +103,62 @@ module.exports.getEvents = (userId) => {
 module.exports.getMapEvents = () => {
     return db.query(
         `
-        SELECT *
+        SELECT id, latitude, longitude, name, description, date, time
         FROM events;
         `
     );
 };
+
+module.exports.addEvent = (latitude, longitude, name, description, date, time, organizerId) => {
+    return db.query(
+        `
+        INSERT INTO events (latitude, longitude, name, description, date, time, organizer_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING id;
+        `,
+        [latitude, longitude, name, description, date, time, organizerId]
+    );
+}
+
+module.exports.addParticipant = (eventId, userId) => {
+    return db.query(
+        `
+        INSERT INTO participants (event_id, user_id)
+        VALUES ($1, $2)
+        RETURNING event_id as id;
+        `,
+        [eventId, userId]
+    );
+}
+
+module.exports.deleteParticipants = (eventId) => {
+    return db.query(
+        `
+        DELETE FROM participants
+        WHERE event_id = $1
+        `,
+        [eventId]
+    );
+}
+
+module.exports.deleteEvent = (eventId, userId) => {
+    return db.query(
+        `
+        DELETE FROM events
+        WHERE id = $1
+        AND organizer_id = $2; 
+        `,
+        [eventId, userId]
+    );
+}
+
+module.exports.deleteParticipant = (eventId, userId) => {
+    return db.query(
+        `
+        DELETE FROM participants
+        WHERE event_id = $1
+        AND user_id = $2
+        `,
+        [eventId, userId]
+    );
+}

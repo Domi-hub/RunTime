@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Row, Col, Toast } from "react-bootstrap";
+import { addMapEvent, getNewEventAddress } from "./actions";
 
 export default function CreateEvent({ pointer, show, onClose }) {
+    const dispatch = useDispatch();
+
+    const newEventAddress = useSelector(state => state.newEventAddress);
+
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
+
+    useEffect(() => {
+        dispatch(getNewEventAddress(pointer.lat, pointer.lng));
+    }, []);
 
     return (
         <Toast style={{ position: 'absolute', top: pointer.y, left: pointer.x }} show={show} onClose={onClose}>
@@ -17,7 +27,21 @@ export default function CreateEvent({ pointer, show, onClose }) {
                     <Row>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Name</Form.Label>
+                                <Form.Label>
+                                    <strong> Address </strong>
+                                </Form.Label>
+                                {newEventAddress && (
+                                    <p> {newEventAddress} </p>
+                                )}
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>
+                                    <strong> Name </strong>
+                                </Form.Label>
                                 <Form.Control
                                     name = "name" 
                                     placeholder="Name"
@@ -28,19 +52,9 @@ export default function CreateEvent({ pointer, show, onClose }) {
                         </Col>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Date</Form.Label>
-                                <Form.Control
-                                    name = "date" 
-                                    type="date"
-                                    onChange={e => setDate(e.target.value)}
-                                    />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Description</Form.Label>
+                                <Form.Label>
+                                    <strong> Description </strong>
+                                </Form.Label>
                                 <Form.Control
                                     name = "description" 
                                     placeholder="Description"
@@ -51,9 +65,25 @@ export default function CreateEvent({ pointer, show, onClose }) {
                                     />
                             </Form.Group>
                         </Col>
+                    </Row>
+                    <Row>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Time</Form.Label>
+                                <Form.Label>
+                                    <strong> Date </strong>
+                                </Form.Label>
+                                <Form.Control
+                                    name = "date" 
+                                    type="date"
+                                    onChange={e => setDate(e.target.value)}
+                                    />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group>
+                                <Form.Label>
+                                    <strong> Time </strong>
+                                </Form.Label>
                                 <Form.Control
                                     name = "time" 
                                     type="time"
@@ -65,7 +95,12 @@ export default function CreateEvent({ pointer, show, onClose }) {
                     <Row>
                         <Col />
                         <Col>
-                            <Button variant="warning"> 
+                            <Button 
+                                variant="warning"
+                                onClick={() => {
+                                    dispatch(addMapEvent(pointer.lat, pointer.lng, name, description, date, time));
+                                    onClose();
+                                }}> 
                                     Save
                             </Button>
                         </Col>

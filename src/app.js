@@ -36,6 +36,11 @@ export default function App() {
                 <Route path="/profile" component={Profile} />
                 <Route exact path="/" component={GoogleMap}/>
             </Fragment>
+            <footer className="page-footer font-small blue">
+                <div className="footer-copyright text-center py-3">
+                    © 2019 Dominika Tazikova
+                </div>
+            </footer>
         </BrowserRouter>
     );
 };

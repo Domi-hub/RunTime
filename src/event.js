@@ -1,22 +1,16 @@
-import React, { Fragment, useState } from 'react';
-import { Card, Button } from "react-bootstrap";
+import React, { useState } from 'react';
 
-export default function Event({ lat, lng }) {
-    const [showDetails, setShowDetails] = useState(false)
+export default function Event({ onClick }) {
+    const [icon, setIcon] = useState("🔵");
 
     return (
-        <Fragment>
-            <h1 onClick={() => setShowDetails(!showDetails)}>
-                🚩
-            </h1>
-            {showDetails && (
-                <Card style={{ height: "30vh", width: "30vh" }}>
-                    <Card.Title> Event Name </Card.Title>
-                    <Card.Subtitle> {lat} {lng} </Card.Subtitle>
-                    <Card.Body> Come and join us! </Card.Body>
-                    <Button> Join </Button>
-                </Card>
-            )}
-        </Fragment>
+        <div
+            style={{ height: "15px", width: "15px", cursor: "pointer" }}
+            onClick={(event) => {
+                setIcon("🔴");
+                onClick({x: event.clientX, y: event.clientY, setIcon: setIcon});
+        }}>
+             {icon}
+        </div>
     )
 }

@@ -27,12 +27,12 @@ CREATE TABLE profiles
 CREATE TABLE events
 (
     id SERIAL PRIMARY KEY,
-    name VARCHAR, 
+    name VARCHAR NOT NULL, 
     description TEXT,
-    date date,  
-    time time,
-    latitude FLOAT(6),
-    longitude FLOAT(6),
+    date date NOT NULL,
+    time time NOT NULL,
+    latitude FLOAT(6) NOT NULL,
+    longitude FLOAT(6) NOT NULL,
     organizer_id INT REFERENCES users(id) NOT NULL
 );
 

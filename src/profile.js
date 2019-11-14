@@ -51,20 +51,21 @@ function EditProfile({ profile }) {
                         <Col />
                         <Col>
                             <Image
+                                style={{ height: "25vh" }}
                                 src={profile.imageUrl === "" ? "/default.jpeg" : profile.imageUrl }
                                 alt={profile.firstName + " " + profile.lastName}
                                 rounded
                             />
                         </Col>
                         <Col />
-                        <Col />
                     </Row>
                     <Row>
                         <Col />
                         <Col>
-                            <ImageUploader />
+                            <Form.Group style={{ margin: "20px" }}>
+                                <ImageUploader />
+                            </Form.Group>
                         </Col>
-                        <Col />
                         <Col />
                     </Row>
                     <Row>
