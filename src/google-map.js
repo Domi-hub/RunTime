@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import GoogleMapReact from 'google-map-react';
-import { getMapEvents } from "./actions";
+import { getMapEvents, getUserLocation } from "./actions";
 import { Card } from "react-bootstrap";
 import CreateEvent from "./create-event";
 import Event from "./event";
@@ -11,7 +11,7 @@ export default function GoogleMap() {
     const dispatch = useDispatch();
 
     const events = useSelector(state => state.mapEvents);
-    const [center, setCenter] = useState({lat: 52.519457, lng: 13.410072 });
+    const location = useSelector(state => state.userLocation);
 
     const [pointer, setPointer] = useState(null);
     const [showPointer, setShowPointer] = useState(false);
@@ -20,8 +20,13 @@ export default function GoogleMap() {
     const [showMarker, setShowMarker] = useState(false);
 
     useEffect(() => {
+        dispatch(getUserLocation())
         dispatch(getMapEvents());
     }, []);
+
+    if (!location) {
+        return null;
+    }
 
     return (
         <Card className="google-map">
@@ -29,8 +34,8 @@ export default function GoogleMap() {
                 options={{
                     fullscreenControl: false
                 }}
-                defaultCenter={center}
-                defaultZoom={12}
+                defaultCenter={location}
+                defaultZoom={13}
                 onClick={(pointer) => {
                     setPointer(pointer);
                     setShowPointer(true);

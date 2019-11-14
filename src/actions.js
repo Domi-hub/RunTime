@@ -171,6 +171,7 @@ export async function addMapEvent(latitude, longitude, name, description, date, 
         }
         const { data } = await axios.post("/api/event", event);
         event.id = data.id;
+        event.participation = 1;
         
         return {
             type: "ADD_MAP_EVENT",
@@ -202,14 +203,17 @@ export async function getNewEventAddress(latitude, longitude) {
         console.error(e);
         return {
             type: "GET_NEW_EVENT_ADDRESS",
-            isError: true
+            newEventAddress: ""
         };
     }
 }
 
 export async function getEventAddress(latitude, longitude) {
     try {
-        const { data } = await axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=" + key);
+        const { data } = await axios.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
+            + latitude + "," 
+            + longitude 
+            + "&key=" + key);
 
         let address = "";
         if (data.results.length > 0) {
@@ -224,7 +228,35 @@ export async function getEventAddress(latitude, longitude) {
         console.error(e);
         return {
             type: "GET_EVENT_ADDRESS",
-            isError: true
+            eventAddress: ""
+        };
+    }
+}
+
+export async function getUserLocation() {
+    let location = {lat: 52.519457, lng: 13.410072 };
+    try {
+        var { data } = await axios.get("/api/profile")
+        var { data } = await axios.get("https://maps.googleapis.com/maps/api/geocode/json?address=" 
+        + data.address.split(" ").join("+") + "," 
+        + data.postcode.split(" ").join("+") + "," 
+        + data.city.split(" ").join("+") + "," 
+        + data.country.split(" ").join("+")
+        + "&key=" + key);
+
+        if (data.results.length > 0) {
+            location = data.results[0].geometry.location;
+        }
+
+        return {
+            type: "GET_USER_LOCATION",
+            userLocation: location
+        }
+    } catch (e) {
+        console.error(e);
+        return {
+            type: "GET_USER_LOCATION",
+            userLocation: location
         };
     }
 }
@@ -234,7 +266,8 @@ export async function joinEvent(id) {
         await axios.post("/api/event/" + id);
         
         return {
-            type: "JOIN_EVENT"
+            type: "JOIN_EVENT",
+            joinedEventId: id
         };
     } catch (e) {
         console.error(e);

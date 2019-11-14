@@ -57,6 +57,13 @@ VALUES
 ('Miyah', 'Seppanen', 'coriander8@example.com', '$2y$12$pFettvWn59xj2HDX5ovCJe/Mqjf3NSFhjXJG1.NZMz.LZUMnUUR2u', 'https://images-na.ssl-images-amazon.com/images/M/MV5BMTQwMDQ0NDk1OV5BMl5BanBnXkFtZTcwNDcxOTExNg@@._V1_UY256_CR2,0,172,256_AL_.jpg'),
 ('Stu', 'Ngo', 'coriander9@example.com', '$2y$12$pFettvWn59xj2HDX5ovCJe/Mqjf3NSFhjXJG1.NZMz.LZUMnUUR2u', 'https://images.unsplash.com/photo-1507120878965-54b2d3939100?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=99fbace66d1bfa48c9c6dc8afcac3aab');
 
+INSERT INTO profiles (address, postcode, city, country, user_id)
+VALUES
+('Mlynská 883/12', '040 01', 'Košice', 'Slovakia', '1'),
+('Leipziger Str. 125', '10117', 'Berlin', 'Deutschland', '2'),
+('Horner Weg 94', '20535', 'Hamburg', 'Deutschland', '3'),
+('229 Avenue Jean Lolive', '93500', 'Pantin', 'France', '4');
+
 INSERT INTO events (name, description, date, time, latitude, longitude, organizer_id)
 VALUES
 ('Sunday Run', 'Run in Tiergarden.', '2019-11-24', '19:00', '52.514382', '13.338356', '3'),

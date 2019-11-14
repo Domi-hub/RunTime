@@ -75,14 +75,16 @@ export default function EventDetails({ marker, show, onClose }) {
                     </Row>
                     <Row>
                         <Col>
-                            <Button 
-                                variant="warning"
-                                onClick={() => {
-                                    dispatch(joinEvent(marker.event.id));
-                                    onClose();
-                                }}> 
-                                Join 
-                            </Button>
+                            {!marker.event.participation && (
+                                <Button 
+                                    variant="warning"
+                                    onClick={() => {
+                                        dispatch(joinEvent(marker.event.id));
+                                        onClose();
+                                    }}> 
+                                    Join 
+                                </Button>
+                            )}
                         </Col>
                     </Row>
                 </Form>

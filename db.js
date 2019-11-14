@@ -100,12 +100,18 @@ module.exports.getEvents = (userId) => {
     );
 };
 
-module.exports.getMapEvents = () => {
+module.exports.getMapEvents = (userId) => {
     return db.query(
         `
-        SELECT id, latitude, longitude, name, description, date, time
+        SELECT id, latitude, longitude, name, description, date, time, (
+            SELECT 1
+            FROM participants
+            WHERE participants.event_id = events.id
+            AND participants.user_id = $1
+        ) as participation
         FROM events;
-        `
+        `,
+        [userId]
     );
 };
 

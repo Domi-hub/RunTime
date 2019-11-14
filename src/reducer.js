@@ -113,7 +113,16 @@ export function reducer(state = {}, action) {
                     isError: action.isError
                 };
             }
-            return state;
+            const mapEvents = state.mapEvents.map((event) => {
+                if (event.id == action.joinedEventId) {
+                    event.participation = 1;
+                }
+                return event
+            })
+            return {
+                ...state,
+                mapEvents: mapEvents
+            };
         case "DELETE_MY_EVENT":
             if (action.isError) {
                 return {
@@ -136,6 +145,17 @@ export function reducer(state = {}, action) {
                 ...state,
                 participatingEvents: state.participatingEvents.filter((event) => event.id != action.myCanceledParticipatingEventId)
             };
+        case "GET_USER_LOCATION":
+                if (action.isError) {
+                    return {
+                        ...state,
+                        isError: action.isError
+                    };
+                }
+                return {
+                    ...state,
+                    userLocation: action.userLocation
+                };
         default:
             return state;
     }

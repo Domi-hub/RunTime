@@ -19,98 +19,103 @@ export default function Register() {
                 <Fragment> Something went wrong. </Fragment>
             )}
 
-            <Card>
-                <Card.Header className="text-center">
-                    <strong> Register </strong>
-                </Card.Header>
-
-                <Form>
+            <Card style={{ border: '0px' }}>
+                <Card.Img src="./run.jpeg" alt="Card image" />
+                <Card.ImgOverlay>
                     <Row>
                         <Col />
                         <Col>
-                            <Form.Group>
-                                <Form.Label>First Name</Form.Label>
-                                <Form.Control
-                                    name = "firstName" 
-                                    placeholder="First Name"
-                                    autoComplete="first-name"
-                                    onChange={e => setFirstName(e.target.value)}
-                                    />
-                            </Form.Group>
+                            <Card bg="light" style={{ opacity: 0.9 }}>
+                                <Card.Header className="text-center">
+                                    <strong> Register </strong>
+                                </Card.Header>
+
+                                <Card.Body>
+                                    <Form>
+                                        <Row>
+                                            <Col>
+                                                <Form.Group>
+                                                    <Form.Label>First Name</Form.Label>
+                                                    <Form.Control
+                                                        name = "firstName" 
+                                                        placeholder="First Name"
+                                                        autoComplete="first-name"
+                                                        onChange={e => setFirstName(e.target.value)}
+                                                        />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col>
+                                                <Form.Group>
+                                                    <Form.Label>Last Name</Form.Label>
+                                                    <Form.Control
+                                                        name = "lastName" 
+                                                        placeholder="Last Name"
+                                                        autoComplete="last-name"
+                                                        onChange={e => setLastName(e.target.value)}
+                                                        />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col>
+                                                <Form.Group>
+                                                    <Form.Label>Email address</Form.Label>
+                                                    <Form.Control 
+                                                        name="email"
+                                                        type="email"
+                                                        autoComplete="email"
+                                                        placeholder="Email"
+                                                        onChange={e => setEmail(e.target.value)} 
+                                                        />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col>
+                                                <Form.Group>
+                                                    <Form.Label>Password</Form.Label>
+                                                    <Form.Control 
+                                                        name="password"
+                                                        type="password"
+                                                        autoComplete="current-password"
+                                                        placeholder="Password"
+                                                        onChange={e => setPassword(e.target.value)}
+                                                        />
+                                                </Form.Group>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col>
+                                                <Button 
+                                                    variant="warning"
+                                                    block
+                                                    onClick={() => dispatch(register(email, password, firstName, lastName))}>
+                                                        Register
+                                                </Button>
+                                            </Col>
+                                        </Row>
+
+                                        <Row> 
+                                            <Col>
+                                                <p className="text-center">
+                                                    <Link to="/login">Click here to Log In</Link>
+                                                </p>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                </Card.Body>
+                            </Card>
                         </Col>
                         <Col />
                     </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control
-                                    name = "lastName" 
-                                    placeholder="Last Name"
-                                    autoComplete="last-name"
-                                    onChange={e => setLastName(e.target.value)}
-                                    />
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control 
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    placeholder="Email"
-                                    onChange={e => setEmail(e.target.value)} 
-                                    />
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Form.Group>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control 
-                                    name="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                    onChange={e => setPassword(e.target.value)}
-                                    />
-                            </Form.Group>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row>
-                        <Col />
-                        <Col>
-                            <Button 
-                                variant="warning"
-                                onClick={() => dispatch(register(email, password, firstName, lastName))}>
-                                    Register
-                            </Button>
-                        </Col>
-                        <Col />
-                    </Row>
-
-                    <Row> 
-                    <Col />
-                        <Link to="/login">Click here to Log In</Link>
-                        <Col />
-                    </Row>
-                </Form>
+                </Card.ImgOverlay>
             </Card>
-
         </Fragment>
     );
 }

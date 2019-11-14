@@ -10,7 +10,8 @@ export default function ImageUploader() {
     
     return (
         <Form.Group>
-            <Row>
+            <Row style={{ marginTop: "32px" }}>
+                <Col />
                 <Col>
                     <Form.Control
                         name="image"
@@ -25,6 +26,7 @@ export default function ImageUploader() {
                         Upload
                     </Button>
                 </Col>
+                <Col />
             </Row>
         </Form.Group>
     );

@@ -175,7 +175,9 @@ app.get("/api/events", (req, res) => {
 });
 
 app.get("/api/map", (req, res) => {
-    db.getMapEvents()
+    const userId = req.session.userId;
+
+    db.getMapEvents(userId)
         .then(result => res.json({
             events: result.rows
         }))
