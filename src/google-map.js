@@ -34,6 +34,7 @@ export default function GoogleMap() {
                 options={{
                     fullscreenControl: false
                 }}
+                bootstrapURLKeys={{ key: '' }}
                 defaultCenter={location}
                 defaultZoom={13}
                 onClick={(pointer) => {

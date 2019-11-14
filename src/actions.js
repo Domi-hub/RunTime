@@ -1,5 +1,6 @@
 import axios from "./axios";
 
+const key = ""
 
 export async function login(email, password) {
     if (email.indexOf("@") == -1) {
